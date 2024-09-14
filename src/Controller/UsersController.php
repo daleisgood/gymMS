@@ -44,6 +44,25 @@ class UsersController extends AppController
      *
      * @return \Cake\Http\Response|null|void Redirects on successful add, renders view otherwise.
      */
+    public function login()
+    {
+        if ($this->request->is('post')) {
+            $user = $this->Auth->identify();  // AuthComponent checks user credentials
+            if ($user) {
+                $this->Auth->setUser($user);  // Set the user session
+                return $this->redirect($this->Auth->redirectUrl());  // Redirect after login
+            }
+            // Flash message if login fails
+            $this->Flash->error(__('Invalid email or password, try again'));
+        }
+    }
+
+    public function logout()
+    {
+        return $this->redirect($this->Auth->logout());
+    }
+
+
     public function add()
     {
         $user = $this->Users->newEmptyEntity();

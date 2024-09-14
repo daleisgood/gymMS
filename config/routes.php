@@ -23,6 +23,7 @@
 
 use Cake\Routing\Route\DashedRoute;
 use Cake\Routing\RouteBuilder;
+use App\Controller\AdminController;
 
 /*
  * This file is loaded in the context of the `Application` class.
@@ -30,17 +31,26 @@ use Cake\Routing\RouteBuilder;
   * if required.
  */
 return function (RouteBuilder $routes): void {
+
+    $routes->connect('/login', ['controller' => 'Users', 'action' => 'login']);
+$routes->connect('/logout', ['controller' => 'Users', 'action' => 'logout']);
+
+    $routes->scope('/admin', function (RouteBuilder $builder) {
+        $builder->connect('/', ['controller' => 'Admin', 'action' => 'dashboard']);
+        $builder->connect('/users', ['controller' => 'Admin', 'action' => 'users']);
+        $builder->connect('/sessions', ['controller' => 'Admin', 'action' => 'sessions']);
+        $builder->connect('/trainers', ['controller' => 'Admin', 'action' => 'trainers']);
+        $builder->connect('/equipment', ['controller' => 'Admin', 'action' => 'equipment']);
+        $builder->connect('/addUser', ['controller' => 'Admin', 'action' => 'addUser']);
+        $builder->connect('/addSession', ['controller' => 'Admin', 'action' => 'addSession']);
+        $builder->connect('/addTrainer', ['controller' => 'Admin', 'action' => 'addTrainer']);
+        $builder->connect('/addEquipment', ['controller' => 'Admin', 'action' => 'addEquipment']);
+    });
     $routes->setRouteClass(DashedRoute::class);
-    $routes->connect('/services', ['controller' => 'Pages', 'action' => 'services']);
     $routes->connect('/trainers', ['controller' => 'Pages', 'action' => 'trainers']);
     $routes->connect('/sessions', ['controller' => 'Pages', 'action' => 'sessions']);
-    // $routes->connect('/contact', ['controller' => 'Pages', 'action' => 'contact']);
     $routes->scope('/', function (RouteBuilder $builder): void {
-        /*
-         * Here, we are connecting '/' (base path) to a controller called 'Pages',
-         * its action called 'display', and we pass a param to select the view file
-         * to use (in this case, templates/Pages/home.php)...
-         */
+        
         $builder->connect('/', ['controller' => 'Pages', 'action' => 'display', 'home']);
         
         /*
